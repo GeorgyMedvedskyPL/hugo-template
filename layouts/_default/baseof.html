@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.LanguageCode }}">
+
+{{ partial "head/main.html" . }}
+
+<body class="page">
+  {{ partial "header/main.html" . }}
+  {{ block "main" . }}{{ end }}
+  {{ partial "footer/main.html" . }}
+
+  {{- range .Site.Params.scripts -}}
+    {{- $script := resources.Get . | minify | fingerprint | babel -}}
+    <script src="{{ $script.Permalink }}" defer="defer"></script>
+  {{- end -}}
+</body>
+</html>

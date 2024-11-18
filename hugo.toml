@@ -1,0 +1,33 @@
+baseURL = 'https://example.org/'
+title = 'Hugo Template'
+disableKinds = ["taxonomy"]
+noindex = true
+alternateName = 'example.org'
+defaultContentLanguage = 'en'
+
+favicon_png = ""
+favicon_svg = ""
+favicon_ico = ""
+safari_logo = ""
+
+[languages]
+  [languages.en]
+    contentDir = "content"
+    languageName = "English"
+    languageCode = 'en-EN'
+    defaultContentLanguage = 'en'
+    [languages.en.params]
+      flag = ""
+      country_name = "USA"
+      languageLocale = "en-EN"
+      meta_twitter_label = ""
+      meta_twitter_data = ""
+
+[params]
+scripts = [
+  "js/script.js"
+]
+
+[security]
+  [security.exec]
+    allow = ['^(dart-)?sass(-embedded)?$', '^go$', '^npx$', '^postcss$', '^babel$']

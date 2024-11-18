@@ -1,0 +1,29 @@
+*,
+::after,
+::before {
+	box-sizing: border-box;
+}
+
+html {
+	block-size: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, ol, li, blockquote, fieldset {
+	margin: 0;
+	padding: 0;
+}
+
+ul, ol {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+/* main */
+.page {
+  position: relative;
+  font-family: 'Oswald';
+  @include font(16px, 400, 1.5, $text-color-main);
+}

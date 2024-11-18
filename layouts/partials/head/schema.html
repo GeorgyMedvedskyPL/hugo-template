@@ -1,0 +1,128 @@
+{{- $scratch := newScratch -}}
+
+{{- $scratch.Set "pages" slice -}}
+{{- $scratch.Set "reversed" slice -}}
+{{- $scratch.Set "current" . -}}
+
+{{- range slice 1 2 3 4 5 6 -}}
+{{- if ($scratch.Get "current") -}}
+{{- $scratch.Add "reversed" ($scratch.Get "current") -}}
+{{- $scratch.Set "current" ($scratch.Get "current").Parent -}}
+{{- end -}}
+{{- end -}}
+
+{{- $scratch.Set "position" (len ($scratch.Get "reversed")) -}}
+{{- range $scratch.Get "reversed" -}}
+{{- $scratch.Add "pages" (dict "position" ($scratch.Get "position") "page" .) -}}
+{{- $scratch.Set "position" (sub ($scratch.Get "position") 1) -}}
+{{- end -}}
+
+<script type="application/ld+json">
+	{
+    "@context": "https://schema.org",
+    "@graph": [
+    {
+        "@type": "WebSite",
+        "@id": "{{ absLangURL "" }}#website",
+        "url": "{{ absLangURL "" }}",
+        "name": "{{.Site.Params.sitename}}",
+				"alternateName": "{{.Site.Params.alternateName}}",
+        "description": "{{ with .Site.GetPage "_index.md" }}{{.Params.Description | markdownify}}{{end}}",
+        "potentialAction": [
+        {
+            "@type": "SearchAction",
+            "target":
+            {
+                "@type": "EntryPoint",
+                "urlTemplate": "{{ absLangURL "" }}?s={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }],
+        "inLanguage": "{{ or site.Language.LanguageCode site.Language.Lang }}"
+    },
+    {
+        "@type":"Organization",
+        "@id":"{{ absURL "" }}#organization",
+        "name":"{{ with .Site.GetPage "_index.md" }}{{.Title | markdownify}}{{end}}",
+        "url":"{{ absURL "" }}",
+        "logo":
+        {
+            "@type":"ImageObject",
+            "@id":"{{ absURL "" }}#organizationLogo",
+            "url":"{{ $.Scratch.Get "image" }}",
+            "width":111,
+            "height":111
+        },
+        "image":
+        {
+            "@id":"{{ absURL "" }}#organizationLogo"
+        }
+    },
+    {
+        "@type": "ImageObject",
+        "@id": "{{.Permalink}}#primaryimage",
+        "inLanguage": "{{ or site.Language.LanguageCode site.Language.Lang }}",
+        "url": "{{$.Scratch.Get "image"}}",
+        "contentUrl": "{{$.Scratch.Get "image"}}",
+        "width": 111,
+        "height": 111,
+        "caption": "{{.Params.h1}}"
+    },
+    {
+        "@type": "WebPage",
+        "@id": "{{.Permalink}}#webpage",
+        "url": "{{.Permalink}}",
+        "name": "{{ $.Scratch.Get "title" }}",
+        "isPartOf":
+        {
+            "@id": "{{ absLangURL "" }}#website"
+        },
+        "primaryImageOfPage":
+        {
+            "@id": "{{.Permalink}}#primaryimage"
+        },
+        "datePublished": "{{.PublishDate.Format "2006-01-02 15:04:05"}}",
+        "dateModified": "{{.Lastmod.Format "2006-01-02 15:04:05"}}",
+        "description": "{{ $.Scratch.Get "description" }}",
+        "inLanguage": "{{ or site.Language.LanguageCode site.Language.Lang }}",
+        "potentialAction": [
+        {
+            "@type": "ReadAction",
+            "target": ["{{.Permalink}}"]
+        }]
+    },
+    {
+        "@type": "BreadcrumbList",
+        "@id": "{{.Permalink}}#breadcrumb",
+        {{- if eq .Type "pages"}}
+        "itemListElement": [
+            {{- with .Site.GetPage "home" -}}
+            {
+            "@type": "ListItem",
+            "position": 1,
+            "item": "{{ .Permalink}}",
+            "name": "{{ .Params.ankor }}"
+            },
+            {
+            "@type": "ListItem",
+            "position": 2,
+            "item": "{{ .Permalink}}",
+            "name": "{{ .Params.ankor }}"
+            }
+            {{- end -}}
+        ] {{else}}
+        "itemListElement": [
+            {{- range sort ($scratch.Get "pages") "position" "asc" -}}{{- if ne .position 1 -}},{{- end -}}
+
+            {
+            "@type": "ListItem",
+            "position": {{ .position }},
+            "item": "{{ .page.Permalink}}",
+            "name": "{{ if .page.Params.breadcrumb }}{{ .page.Params.breadcrumb }}{{ else }}{{ .page.Params.ankor }}{{ end }}"
+            }
+
+            {{- end -}}
+        ] {{end}}
+    }]
+}
+</script>

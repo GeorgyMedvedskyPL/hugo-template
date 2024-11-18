@@ -1,0 +1,14 @@
+User-Agent: *
+
+Disallow: /play/
+
+Allow: /
+Disallow: /cdn-cgi/
+User-agent: GPTBot
+Disallow: /
+User-agent: ChatGPT-User
+Disallow: /
+User-agent: CCBot
+Disallow: /
+
+Sitemap: {{.Site.BaseURL}}sitemap.xml

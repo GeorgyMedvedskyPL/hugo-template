@@ -1,0 +1,28 @@
+RewriteEngine On
+
+# Переправление с www на без www
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [L,R=301]
+
+# Перенаправление с index/ на корневой URL
+RewriteRule ^index/?$ / [R=301,L]
+
+# Удаление лишних слешей
+RewriteCond %{THE_REQUEST} //
+RewriteRule ^.*$ /$0 [R=301,L]
+
+# Запросы c index.html на корень
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Замена двойных тире на одинарные
+RewriteCond %{REQUEST_URI} "--" [NC]
+RewriteRule ^(.*)--(.*)$ https://%{HTTP_HOST}/$1-$2 [R=301,L]
+
+# Редиректы 301 для всех остальных страниц
+# RewriteRule ^play/$ https://wadcpa.rdrtdmn.org/click?pid=7&offer_id=32&sub1=leon-greece.site&sub2=seo&sub3=1win [R=301,L]
+
+# Если файл или директория не существуют, устанавливаем статус 404
+RewriteRule ^ - [L]
+
+# Настраиваем документ ошибки 404
+ErrorDocument 404 /404/
