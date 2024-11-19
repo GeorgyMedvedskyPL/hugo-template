@@ -2,7 +2,7 @@
 
 ## Начало работы
 
-```git clone https://github.com/GeorgyMedvedskyPL/hugo-template.git```
+```git clone https://github.com/GeorgyMedvedskyPL/hugo-template.git```  
 ```npm i``` в корне проекта установит необходимые зависимости
 
 ## Что внутри?
