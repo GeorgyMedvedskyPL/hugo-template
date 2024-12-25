@@ -8,9 +8,10 @@
   {{ block "main" . }}{{ end }}
   {{ partial "footer/main.html" . }}
 
-  {{- range .Site.Params.scripts -}}
-    {{- $script := resources.Get . | minify | fingerprint | babel -}}
-    <script src="{{ $script.Permalink }}" defer="defer"></script>
+  {{- $scripts := resources.Match "js/*.js" -}}
+  {{- range $scripts -}}
+      {{- $script := . | minify | fingerprint | babel -}}
+      <script src="{{ $script.Permalink }}" defer="defer"></script>
   {{- end -}}
 </body>
 </html>

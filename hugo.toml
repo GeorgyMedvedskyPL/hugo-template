@@ -24,9 +24,6 @@ safari_logo = ""
       meta_twitter_data = ""
 
 [params]
-scripts = [
-  "js/script.js"
-]
 
 [security]
   [security.exec]
